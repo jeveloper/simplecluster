@@ -1,5 +1,8 @@
 # Blazing cluster app
 
+0.1 -> create jobs to use phantomJS for rendering urls and saving them as images
+	   Unfortunately phantomJS runs in a separate child process 
+
 Basic Operation:
 
 node cluster.js 
