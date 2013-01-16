@@ -9,10 +9,6 @@ var binPath = phantomjs.path
 var path = require('path')
 
 
-
-var fullpath = "phantomjs "+__dirname + "/phantomstuff.js"
-
-
 var childArgs = [
   path.join(__dirname, 'phantomstuff.js'),
   'http://jeveloper.com'

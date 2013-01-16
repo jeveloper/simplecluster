@@ -4,8 +4,8 @@ var kue = require('kue');
 
 var numCPUs = require('os').cpus().length;
 
-
-numCPUs = 10;
+//10 is usually enough for stable service on a dual core chip (my laptop)
+numCPUs = 6;
 
 
 //Should this process exit once al jobs are complete
@@ -33,10 +33,11 @@ cluster.setupMaster({
 
 console.log(" started cluster");
 
+//i am practical, this handler will keep the worker processes running
 
 cluster.on('exit', function(worker, code, signal) {
   var exitCode = worker.process.exitCode;
-  console.log('worker ' + worker.process.pid + ' died ('+exitCode+'). restarting...');
+  console.log('worker ' + worker.process.pid + ' died with code: ('+exitCode+'). restarting...');
   cluster.fork();
 });
 
@@ -48,7 +49,7 @@ for (var i = 0; i < numCPUs; i++) {
   }
 
 
-  kue.app.set('title', 'Bluenotion Control Centre');  
+  kue.app.set('title', 'Control Centre');  
     kue.app.listen(3000);
     console.log("STARTED UP UI FOR KUE");
 

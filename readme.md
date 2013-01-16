@@ -1,5 +1,16 @@
 # Blazing cluster app
 
+Basic Operation:
+
+node cluster.js 
+
+wait for all worker to start, Redis must be running
+
+node client.js to create jobs 
+
+Visually http://localhost:3000 you can see jobs in a queue 
+
+
 Feats
  
  - client loads up a list of sites to check out

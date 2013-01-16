@@ -1,100 +1,34 @@
  
 //CLIENT
-var mysql      = require('mysql'),
+var 
 kue = require('kue'), 
 jobs = kue.createQueue(),
-Job = kue.Job,
-parse      = require('./parse'),
-connection = mysql.createConnection({
-	host     : '127.0.0.1',
-	user     : 'rogers',
-	password : 'rogers',
-	database : 'belldata'
-});
+Job = kue.Job;
 
 
-var sql = " \
-select * from bell_address \
-where postal_zip_code NOT IN (select postal_zip_code from bell_availability where available = 'y' or available = '3months') \
-and region  not IN ('QC')  \
-and street_number is not null  \
-order by postal_zip_code DESC \
-limit 0,100 \
-";
+var urls = ["http://jeveloper.com","https://google.com","http://news.ycombinator.com"]
 
 
-
-//THIS IS A GROUP BY query and exclude THOSE we already processed
-var sql = " \
-select * from bell_address \
-where postal_zip_code NOT IN (select postal_zip_code from bell_availability ) \
-and region  not IN ('QC')  \
-and street_number is not null  \
-group by postal_zip_code  \
-limit 500 \
-";
+key=0; while (key<urls.length){
 
 
-
-//TESTING
-
-/*
-var sql = " \
-select * from bell_address \
-where postal_zip_code IN ('E1E0C5') \
-and region  not IN ('QC')  \
-order by postal_zip_code DESC \
-limit 100 \
-";
-
-*/
-var jobcounter = 0;
-
-connection.connect();
-connection.query(sql, 
-	function(err, rows, fields) {
-		if (err) throw err;
-
-		console.log(" rows returned %s: ", rows.length);
-
-		for( var r in rows ) {
-			var row = rows[r];
+url = urls[key];
+console.log (" URL IS %s",url);
 
 
-			var street_type = row.STREET_TYPE;
-			if (!row.STREET_TYPE)
-				street_type = "";
-
-
-					jobs.create('ask_bell', {
+jobs.create('preview_url', {
 				            // Title will show up in UI
-				            title: row.POSTAL_ZIP_CODE,
-				            street_number : row.STREET_NUMBER.trim(),
-				            street_name : row.STREET_NAME.replace("'",""),
-				            street_type : row.STREET_TYPE,
-				            postal_code : row.POSTAL_ZIP_CODE,
-				            city : row.CITY,
-				            province: row.REGION 
-				    }).priority('normal').attempts(3).save();
+				            title: url,
+				            url: url
+				        }).priority('normal').attempts(3).save();
 
-				    console.log("Job counting %d",++jobcounter);
+key++;
 
-				    //clearnup
-				    row = {};
-				  
-		
-  		  	}//for loop	
+}
 
-	console.log(" Finished creating jobs ");
-
-
-});
-
-
-
-		jobs.on('job complete', function(id){
-			Job.get(id, function(err, job){
-				if (err) return;
+jobs.on('job complete', function(id){
+	Job.get(id, function(err, job){
+		if (err) return;
 
  			//CLEANUP
  			job.data = {};
@@ -104,6 +38,6 @@ connection.query(sql,
  				console.log('removed completed job #%d , on %s', job.id, new Date());
  			});
  		});
-		});		
+});		
 
 

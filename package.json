@@ -2,12 +2,12 @@
   "name": "nodecluster",
   "version": "0.0.1",
   "description": "Cluster way of getting work done",
-  "main": "intel.js",
+  "main": "cluster.js",
   "dependencies": {
     "phantomjs": "",
     "kue":"",
     "cluster":"",
     "redis":""
   },
-  "author": " Serge Bornow"
+  "author": "Serge Bornow"
 }
