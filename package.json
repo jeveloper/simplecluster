@@ -4,10 +4,18 @@
   "description": "Cluster way of getting work done",
   "main": "cluster.js",
   "dependencies": {
-    "phantomjs": "",
-    "kue":"",
-    "cluster":"",
-    "redis":""
+   "dotenv": "^0.5.1",
+    "phantomjs": "*",
+    "kue":"*",
+    "cluster":"*",
+    "redis":"*"
   },
+    "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    
+    "start": "node lib/index.js"
+  }
   "author": "Serge Bornow"
 }
