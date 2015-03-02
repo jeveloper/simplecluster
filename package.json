@@ -15,7 +15,7 @@
   },
   "scripts": {
     
-    "start": "node lib/index.js"
+    "start": "node lib/cluster.js"
   }
   "author": "Serge Bornow"
 }
